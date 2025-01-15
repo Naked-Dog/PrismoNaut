@@ -50,6 +50,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int levelTargetGems = 3;
     [SerializeField] private int collectedGems = 0;
     [SerializeField] private int collectedPrisms = 0;
+    [SerializeField] private CollectablesUIController collectablesUIController;
 
     [Header("GameWin")]
     [SerializeField] private GameObject[] endGamePortals;
@@ -64,15 +65,19 @@ public class GameManager : MonoBehaviour
     {
         if (player == null) player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerBaseModule>();
     }
+    private void Start()
+    {
+        collectablesUIController.InitUI(collectedGems, collectedPrisms);
+    }
 
     public void GetGem()
     {
-         collectedGems++;
-         Debug.Log("Current Gems: " + collectedGems);
-         if (collectedGems == levelTargetGems)
+        collectedGems++;
+        collectablesUIController.UpdateGemsUI(collectedGems);
+        if (collectedGems == levelTargetGems)
         {
-             //clear level
-             Debug.Log("Game Cleared");
+            //clear level
+            Debug.Log("Game Cleared");
             StartCoroutine(EnableGameEndPortals());
         }
     }
@@ -80,7 +85,7 @@ public class GameManager : MonoBehaviour
     public void GetPrism()
     {
         collectedPrisms++;
-        Debug.Log("Current Prisms: " + collectedPrisms);
+        collectablesUIController.UpdatePrismsUI(collectedPrisms);
     }
 
     private IEnumerator EnableGameEndPortals()
