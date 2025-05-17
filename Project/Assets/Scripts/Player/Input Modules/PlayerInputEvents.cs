@@ -22,11 +22,6 @@ namespace PlayerSystem
         public bool toggle;
         public OnLookDownInput(bool toggle) { this.toggle = toggle; }
     }
-    public struct OnLookUpInput
-    {
-        public bool toggle;
-        public OnLookUpInput(bool toggle) { this.toggle = toggle; }
-    }
     public struct OnSquarePowerInput { }
     public struct OnTrianglePowerInput { }
     public struct OnCirclePowerInput { }

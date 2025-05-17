@@ -2,7 +2,6 @@ using UnityEngine;
 using System.Collections.Generic;
 using CameraSystem;
 using Cinemachine;
-using System;
 
 namespace PlayerSystem
 {
@@ -32,7 +31,6 @@ namespace PlayerSystem
         private float jumpCooldown = 0f;
         private float landingMoveCooldown = 0f;
         private float groundedGraceTimer = 0f;
-        private PlayerBaseModule baseModule;
 
         readonly float maxJumpCooldown = 0.2f;
         readonly float maxLandingBreakCooldown = 0.1f;
@@ -41,13 +39,11 @@ namespace PlayerSystem
         public Physics2DMovement(
             EventBus eventBus,
             PlayerState playerState,
-            Rigidbody2D rb2d,
-            PlayerBaseModule baseModule)
+            Rigidbody2D rb2d)
             : base(eventBus)
         {
             this.playerState = playerState;
             this.rb2d = rb2d;
-            this.baseModule = baseModule;
 
             eventBus.Subscribe<OnHorizontalInput>(OnHorizontalInput);
             eventBus.Subscribe<OnJumpInput>(OnJumpInput);
@@ -196,14 +192,15 @@ namespace PlayerSystem
             float excessVelocity = -rb2d.linearVelocity.y - threshold;
             if (excessVelocity <= 0) return;
             rb2d.AddForce(Vector2.up * excessVelocity, ForceMode2D.Impulse);
-            baseModule.StartFallingCameraTimer();
+            var fallingCamera = CameraManager.Instance.SearchCamera(CineCameraType.Falling);
+            CameraManager.Instance.ChangeCamera(fallingCamera);
             //AudioManager.Instance.Play2DSound(PlayerSoundsEnum.LoopWindFall, 1, true);
+            //Debug.Log("Falling");
         }
 
         private void PerformLanding()
         {
             playerState.groundState = GroundState.Grounded;
-            baseModule.StopFallingCameraTimer();
             AudioManager.Instance.Stop(PlayerSoundsEnum.LoopWindFall);
             AudioManager.Instance.Play2DSound(PlayerSoundsEnum.Land);
             if (0 < requestedMovement * rb2d.linearVelocity.x) return;

@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using System.Collections;
 using System.Resources;
-using CameraSystem;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -20,7 +18,6 @@ namespace PlayerSystem
         [SerializeField] private GameObject interactSign;
         [SerializeField] private Collider2D dodgeCollider;
         [SerializeField] private Collider2D playerMainCollider;
-        [SerializeField] private bool canMoveAtStart = true;
         
         public static PlayerBaseModule Instance;
         public ChargesUIController chargesUIController;
@@ -28,7 +25,6 @@ namespace PlayerSystem
         public PlayerState state;
         private EventBus eventBus;
         private Dictionary<Direction, TriggerEventHandler> triggers;
-        private Coroutine fallingCamCoroutine = null;
 
         private PlayerInput inputModule;
         private PlayerMovement movementModule;
@@ -53,14 +49,11 @@ namespace PlayerSystem
         protected void Start()
         {
             inputModule = new PlayerInput(eventBus, playerInputAsset);
-            movementModule = new Physics2DMovement(eventBus, state, avatarRigidbody2D, this);
+            movementModule = new Physics2DMovement(eventBus, state, avatarRigidbody2D);
             animationsModule = new PlayerAnimations(eventBus, state, animator);
             powersModule = new PlayerPowersModule(eventBus, state, avatarRigidbody2D, drillPhysicsRelay, drillExitPhysicsRelay, drillJoint, shieldPhysicsRelay, dodgeCollider, playerMainCollider, this);
             healthModule = new PlayerHealthModule(eventBus, state, avatarRigidbody2D, this);
             interactionModule = new PlayerInteractionModule(eventBus, gameObject.GetComponent<PhysicsEventsRelay>(), interactSign, state);
-
-            //eventBus.Subscribe<OnLookUpInput>(OnLookUp);
-            //eventBus.Subscribe<OnLookDownInput>(OnLookDown);
 
             avatarRigidbody2D.GetComponent<PhysicsEventsRelay>()?.OnCollisionEnter2DAction.AddListener(OnCollisionEnter2D);
             avatarRigidbody2D.GetComponent<PhysicsEventsRelay>()?.OnCollisionStay2DAction.AddListener(OnCollisionStay2D);
@@ -74,20 +67,7 @@ namespace PlayerSystem
             GameDataManager.Instance?.SavePlayerPosition(avatarRigidbody2D.position);
             state.lastSafeGroundLocation = avatarRigidbody2D.position;
             chargesUIController.InitChargesUI(state.maxCharges);
-            if (!canMoveAtStart) StopPlayerActions();
         }
-
-        //private void OnLookUp(OnLookUpInput e)
-        //{
-        //    if (e.toggle) CameraManager.Instance.ChangeCamera(CameraManager.Instance.SearchCamera(CineCameraType.LookUp));
-        //    else CameraManager.Instance.ChangeCamera(CameraManager.Instance.SearchCamera(CineCameraType.Regular));
-        //}
-        //
-        //private void OnLookDown(OnLookDownInput e)
-        //{
-        //    if (e.toggle) CameraManager.Instance.ChangeCamera(CameraManager.Instance.SearchCamera(CineCameraType.LookDown));
-        //    else CameraManager.Instance.ChangeCamera(CameraManager.Instance.SearchCamera(CineCameraType.Regular));
-        //}
 
         protected void Update()
         {
@@ -157,44 +137,13 @@ namespace PlayerSystem
             inputModule.Dispose();
         }
 
-        public void StopPlayerActions()
-        {
-            eventBus.Publish(new RequestStopPlayerInputs());
-        }
-
-        public void ResumePlayerActions()
-        {
-            eventBus.Publish(new RequestPlayerInputs());
-        }
-
-        public void StartFallingCameraTimer()
-        {
-            if (fallingCamCoroutine != null) return;
-            fallingCamCoroutine = StartCoroutine(CallingFallCam());
-        }
-        public void StopFallingCameraTimer()
-        {
-            bool isFallingCameraAlready = CameraManager.Instance.IsCameraActive(CameraManager.Instance.SearchCamera(CineCameraType.Falling));
-            if (fallingCamCoroutine == null || isFallingCameraAlready) return;
-            StopCoroutine(fallingCamCoroutine);
-            fallingCamCoroutine = null;
-        }
-        private IEnumerator CallingFallCam()
-        {
-            yield return new WaitForSeconds(1.5f);
-
-            var fallingCamera = CameraManager.Instance.SearchCamera(CineCameraType.Falling);
-            CameraManager.Instance.ChangeCamera(fallingCamera);
-            fallingCamCoroutine = null;
-        }
-
         public void StartChargeRegeneration()
         {
             state.currentCharges -= 1f;
         }
 
         public void GetPrism()
-        { 
+        {
             state.maxCharges++;
             state.currentCharges = state.maxCharges;
             GameManager.Instance.GetPrism();

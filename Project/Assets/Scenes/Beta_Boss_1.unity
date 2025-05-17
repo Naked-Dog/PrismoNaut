@@ -40865,6 +40865,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8768831785862162374, guid: 776ef22c79e3a819c9b8315407d31ce1, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -86249,7 +86253,7 @@ Tilemap:
       - {fileID: -1416360968, guid: 16fe1f176e78d874a8ac9161f49f3360, type: 3}
       - {fileID: -223303099, guid: 16fe1f176e78d874a8ac9161f49f3360, type: 3}
       - {fileID: -1342096354, guid: 16fe1f176e78d874a8ac9161f49f3360, type: 3}
-      m_AnimationSpeed: 10
+      m_AnimationSpeed: 10.000001
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: 21, y: 13, z: 0}

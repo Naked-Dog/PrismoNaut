@@ -48,15 +48,11 @@ namespace CameraSystem
         {
             CineCameraType activeCam = activeCamera ? activeCamera.GetComponent<CamScript>().cameraType: CineCameraType.Regular;
             CineCameraType newCam = newCamera.GetComponent<CamScript>().cameraType;
-
             if (activeCam == CineCameraType.Empty && newCam != CineCameraType.Empty && !forcedTransition) yield break;
 
-            if (activeCam != CineCameraType.Regular && (newCam == CineCameraType.Falling || newCam == CineCameraType.LookUp || newCam == CineCameraType.LookDown)) yield break;
-
+            float waitingAmount = newCamera.gameObject.GetComponent<CamScript>().waitingAmount;
             activeCamera = newCamera;
-
-            //float waitingAmount = newCamera.gameObject.GetComponent<CamScript>().waitingAmount;
-            //yield return new WaitForSeconds(0);
+            yield return new WaitForSeconds(waitingAmount);
 
             newCamera.Priority = 10;
 

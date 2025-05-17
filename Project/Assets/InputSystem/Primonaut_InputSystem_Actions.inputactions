@@ -85,15 +85,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "LookUp",
-                    "type": "Button",
-                    "id": "c9173b3d-e6da-4331-a83f-7cfabfd1e63e",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -556,50 +547,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "LookDown",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "1556a2f8-65a4-4eeb-8581-ccdfac24790b",
-                    "path": "<Joystick>/stick/up",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Gamepad",
-                    "action": "LookUp",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "7438cc81-f012-4378-82f0-516ce8b8349a",
-                    "path": "<Gamepad>/dpad/up",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Gamepad",
-                    "action": "LookUp",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "cf60a75f-fe46-4c8d-9313-1257e9ae8595",
-                    "path": "<Keyboard>/w",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "LookUp",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "ae965be0-af67-4ce6-8ec0-feb3ec9c9530",
-                    "path": "<HID::DragonRise Inc.   Generic   USB  Joystick  >/stick/down",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "LookUp",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
